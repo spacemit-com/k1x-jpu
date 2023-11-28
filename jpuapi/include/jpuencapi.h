@@ -12,8 +12,9 @@ extern "C" {
 #endif
 
 JpgRet AsrJpuEncOpen(void** handle, EncOpenParam* param);
-JpgRet AsrJpuEncSetParam(void* handle,Uint32 parameterIndex, void* value);
-JpgRet AsrJpuEncStartOneFrame(void* handle,FrameBufferInfo* frameBuffer,ImageBufferInfo *jpegImageBuffer);
+JpgRet AsrJpuEncSetParam(void* handle, Uint32 parameterIndex, void* value);
+JpgRet AsrJpuEncStartOneFrame(void* handle, FrameBufferInfo* frameBuffer,
+                              ImageBufferInfo* jpegImageBuffer);
 JpgRet AsrJpuEncClose(void* handle);
 
 #ifdef __cplusplus

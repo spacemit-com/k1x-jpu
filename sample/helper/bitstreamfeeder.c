@@ -32,85 +32,83 @@ extern Int32 BSFeederFrameSize_Act(void* feeder, BSChunk* packet);
 #endif
 
 /**
-* Abstract Bitstream Feeader Functions
-*/
-BSFeeder BitstreamFeeder_Create(const char* path, FeedingMethod method, EndianMode endian)
-{
-    BitstreamFeeder*    handle = NULL;
-    void*               feeder = NULL;
+ * Abstract Bitstream Feeader Functions
+ */
+BSFeeder BitstreamFeeder_Create(const char* path, FeedingMethod method,
+                                EndianMode endian) {
+  BitstreamFeeder* handle = NULL;
+  void* feeder = NULL;
 
-    feeder = BSFeederFixedSize_Create(path);
+  feeder = BSFeederFixedSize_Create(path);
 
-    if (feeder != NULL) {
-        if ((handle=(BitstreamFeeder*)malloc(sizeof(BitstreamFeeder))) == NULL) {
-            JLOG(ERR, "%s:%d Failed to allocate memory\n", __FUNCTION__, __LINE__);
-            return NULL;
-        }
-        handle->actualFeeder = feeder;
-        handle->method       = method;
-        handle->remainData   = NULL;
-        handle->remainDataSize = 0;
-        handle->eos          = FALSE;
-        handle->endian       = endian;
+  if (feeder != NULL) {
+    if ((handle = (BitstreamFeeder*)malloc(sizeof(BitstreamFeeder))) == NULL) {
+      JLOG(ERR, "%s:%d Failed to allocate memory\n", __FUNCTION__, __LINE__);
+      return NULL;
     }
+    handle->actualFeeder = feeder;
+    handle->method = method;
+    handle->remainData = NULL;
+    handle->remainDataSize = 0;
+    handle->eos = FALSE;
+    handle->endian = endian;
+  }
 
-    return (BSFeeder)handle;
+  return (BSFeeder)handle;
 }
 
-Uint32 BitstreamFeeder_Act(BSFeeder feeder, JpgDecHandle handle, ImageBufferInfo *bsBuffer)
-{
+Uint32 BitstreamFeeder_Act(BSFeeder feeder, JpgDecHandle handle,
+                           ImageBufferInfo* bsBuffer) {
+  BitstreamFeeder* bsf = (BitstreamFeeder*)feeder;
+  Int32 feedingSize = 0;
 
-    BitstreamFeeder* bsf = (BitstreamFeeder*)feeder;
-    Int32            feedingSize = 0;
+  if (bsf == NULL) {
+    JLOG(ERR, "%s:%d Null handle\n", __FUNCTION__, __LINE__);
+    return 0;
+  }
 
-    if (bsf == NULL) {
-        JLOG(ERR, "%s:%d Null handle\n", __FUNCTION__, __LINE__);
-        return 0;
-    }
-
-    feedingSize = BSFeederFixedSize_Act(bsf->actualFeeder,bsBuffer);
-    return feedingSize;
+  feedingSize = BSFeederFixedSize_Act(bsf->actualFeeder, bsBuffer);
+  return feedingSize;
 }
 
-BOOL BitstreamFeeder_IsEos(BSFeeder feeder)
-{
-    BitstreamFeeder* bsf = (BitstreamFeeder*)feeder;
+BOOL BitstreamFeeder_IsEos(BSFeeder feeder) {
+  BitstreamFeeder* bsf = (BitstreamFeeder*)feeder;
 
-    if (bsf == NULL) {
-        JLOG(ERR, "%s:%d Null handle\n", __FUNCTION__, __LINE__);
-        return FALSE;
-    }
+  if (bsf == NULL) {
+    JLOG(ERR, "%s:%d Null handle\n", __FUNCTION__, __LINE__);
+    return FALSE;
+  }
 
-    return bsf->eos;
+  return bsf->eos;
 }
 
-BOOL BitstreamFeeder_Destroy(BSFeeder feeder)
-{
-    BitstreamFeeder* bsf = (BitstreamFeeder*)feeder;
+BOOL BitstreamFeeder_Destroy(BSFeeder feeder) {
+  BitstreamFeeder* bsf = (BitstreamFeeder*)feeder;
 
-    if (bsf == NULL) {
-        return FALSE;
-    }
+  if (bsf == NULL) {
+    return FALSE;
+  }
 
-    switch (bsf->method) {
+  switch (bsf->method) {
     case FEEDING_METHOD_FIXED_SIZE:
-        BSFeederFixedSize_Destroy(bsf->actualFeeder);
-        break;
+      BSFeederFixedSize_Destroy(bsf->actualFeeder);
+      break;
     case FEEDING_METHOD_FRAME_SIZE:
 #ifdef USE_FFMPEG
-        BSFeederFrameSize_Destroy(bsf->actualFeeder);
+      BSFeederFrameSize_Destroy(bsf->actualFeeder);
 #endif
-        break;
+      break;
     default:
-        JLOG(ERR, "%s:%d Invalid method(%d)\n", __FUNCTION__, __LINE__, bsf->method);
-        break;
-    }
+      JLOG(ERR, "%s:%d Invalid method(%d)\n", __FUNCTION__, __LINE__,
+           bsf->method);
+      break;
+  }
 
-    if (bsf->remainData) {
-        free(bsf->remainData);
-    }
+  if (bsf->remainData) {
+    free(bsf->remainData);
+  }
 
-    free(bsf);
+  free(bsf);
 
-    return TRUE;
+  return TRUE;
 }
