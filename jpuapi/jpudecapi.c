@@ -20,7 +20,7 @@
 
 #define MIN_Q16_ELEMENT 8
 #define MIN_Q8_ELEMENT 2
-JpgEncOpenParam encOpenParam = {0};
+//JpgEncOpenParam encOpenParam = {0};
 
 JpgRet AsrJpuDecOpen(void **handle, DecOpenParam *param) {
   JdiDeviceCtx devctx = NULL;
