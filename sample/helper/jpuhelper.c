@@ -396,7 +396,7 @@ int StoreYuvImageBurstFormat_V20(BufferAllocator* bufferAllocator,
         memcpy(puc + y * chromaWidth, addr + chromaStride_i * y, chromaWidth);
       }
       puc = dst + lumaSize + chromaSize;
-      addr = addrCb;
+      addr = addrCr;
       for (y = 0; y < nCr; ++y) {
         memcpy(puc + y * chromaWidth, addr + chromaStride_i * y, chromaWidth);
       }
