@@ -22,6 +22,9 @@
 static const char kDmabufSystemHeapName[] = "system";
 static const char kDmabufSystemUncachedHeapName[] = "system-uncached";
 
+static const char kDmabufCmaHeapName[] = "linux,cma";
+static const char kDmabufCmaUncachedHeapName[] = "linux,cma-uncached";
+
 typedef enum {
   kSyncRead = DMA_BUF_SYNC_READ,
   kSyncWrite = DMA_BUF_SYNC_WRITE,

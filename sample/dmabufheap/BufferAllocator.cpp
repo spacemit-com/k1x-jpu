@@ -130,12 +130,12 @@ int BufferAllocator::AllocSystem(bool cpu_access_needed, size_t len,
      */
     static bool uncached_dmabuf_system_heap_support = [this]() -> bool {
       auto dmabuf_heap_list = this->GetDmabufHeapList();
-      return (dmabuf_heap_list.find(kDmabufSystemUncachedHeapName) !=
+      return (dmabuf_heap_list.find(kDmabufCmaUncachedHeapName) !=
               dmabuf_heap_list.end());
     }();
 
     if (uncached_dmabuf_system_heap_support)
-      return DmabufAlloc(kDmabufSystemUncachedHeapName, len);
+      return DmabufAlloc(kDmabufCmaUncachedHeapName, len);
 
     cout << "AllocSystem. don't support system-uncached dma buf." << endl;
   }
@@ -144,7 +144,7 @@ int BufferAllocator::AllocSystem(bool cpu_access_needed, size_t len,
    * Either 1) CPU needs to access allocated buffer OR 2) CPU does not need to
    * access allocated buffer but the "system-uncached" heap is unsupported.
    */
-  return Alloc(kDmabufSystemHeapName, len, heap_flags, legacy_align);
+  return Alloc(kDmabufCmaHeapName, len, heap_flags, legacy_align);
 }
 
 int BufferAllocator::DoSync(unsigned int dmabuf_fd, bool start,
