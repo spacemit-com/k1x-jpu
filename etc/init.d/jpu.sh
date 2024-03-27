@@ -11,4 +11,4 @@
  # @Description: 
 ### 
 
-chmod 660 /dev/jpu0
+chmod 666 /dev/jpu0
