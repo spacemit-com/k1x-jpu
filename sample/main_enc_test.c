@@ -12,6 +12,7 @@
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <sys/time.h>
 
 #include "BufferAllocatorWrapper.h"
 #include "jpuencapi.h"
