@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
+#include <sys/time.h>
 
 #include "BufferAllocatorWrapper.h"
 #include "jpuapi.h"
